@@ -2,15 +2,17 @@
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var g = window || global;
-g;
-console.log(g.BIONT_TEMPLATE_LOADER_CONFIG);
+console.log(global.BIONT_TEMPLATE_LOADER_CONFIG);
 
 var loader = void 0;
 var conf = void 0;
 
 if ((typeof process === 'undefined' ? 'undefined' : _typeof(process)) === 'object' && process + '' === '[object process]') {
     // is node
+    console.log('returning nodeloader');
+    if (global && global.BIONT_TEMPLATE_LOADER_CONFIG) {
+        conf = global.BIONT_TEMPLATE_LOADER_CONFIG;
+    }
     loader = require('./templateLoaders/nodeTemplateLoader');
 } else {
     if (window && window.BIONT_TEMPLATE_LOADER_CONFIG) {

@@ -1,13 +1,15 @@
-let g = window || global;
-g
-console.log(g.BIONT_TEMPLATE_LOADER_CONFIG);
+console.log(global.BIONT_TEMPLATE_LOADER_CONFIG);
 
 let loader;
 let conf;
 
 if (typeof process === 'object' && process + '' === '[object process]') {
     // is node
-    loader = require('./templateLoaders/nodeTemplateLoader');
+	console.log('returning nodeloader');
+	if (global && global.BIONT_TEMPLATE_LOADER_CONFIG) {
+		conf = global.BIONT_TEMPLATE_LOADER_CONFIG
+	}
+	loader = require('./templateLoaders/nodeTemplateLoader');
 }
 else {
     if (window && window.BIONT_TEMPLATE_LOADER_CONFIG) {

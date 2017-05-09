@@ -1,32 +1,21 @@
-import AbstractTemplateLoader from './abstractTemplateLoader';
-export default class NodeTemplateLoader extends AbstractTemplateLoader() {
-    getTemplate(object) {
+import AbstractTemplateLoader from "./abstractTemplateLoader";
+import fs from "fs";
+export default class NodeTemplateLoader extends AbstractTemplateLoader {
+	constructor( args ) {
+		super();
+		this.tplDir = args.tplDir || __dirname + '/' + name + '.js'
+		console.log( this.tplDir );
+	}
 
-        let tpl;
+	templateFound( name ) {
+		return fs.existsSync( this.getLocalPath( name ) );
+	}
 
-        if (tplOverride
-            &&
-            (
-                this.templateFound(tplOverride)
-            )
-        ) {
-            return require(tplOverride);
-        }
-        console.log('fetching', object.constructor.name);
-        let name = this.getTemplateNameFromObject(object)
+	loadTemplate( name ) {
+		return require( this.getLocalPath( name ) );
+	}
 
-
-    }
-
-    templateFound(name) {
-        return fs.existsSync(this.getLocalPath(name));
-    }
-
-    loadTemplate(name) {
-        return require(this.getLocalPath(name));
-    }
-
-    getLocalPath(name) {
-        return __dirname + '/' + tplDir + name + '.js'
-    }
+	getLocalPath( name ) {
+		return this.tplDir + name + '.js'
+	}
 }

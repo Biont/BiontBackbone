@@ -3,10 +3,6 @@ import {each, extend, mapObject} from "underscore";
 
 import Tpl from '../template-loader';
 
-import fs from "fs";
-const tplDir = '../tpl/';
-
-
 const eventStorage = new Map();
 
 
