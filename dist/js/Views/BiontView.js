@@ -184,24 +184,37 @@ var BiontView = function (_Backbone$View$extend) {
             }
 
             var view = _this2.subViews[data.subview];
-            var instance = _this2.subViewInstances[data.subview];
-            if (instance && instance instanceof _backbone2.default.View) {
-                if (!forced) {
-                    instance.render();
-                    return;
-                }
-                instance.remove();
-                delete _this2.subViewInstances[data.subview];
+
+            if (!_this2.shouldRenderSubView(data.subview, view, $this, forced)) {
+                return;
             }
-            if (typeof view === 'function') {
-                // Support traditional and arrow functions to some extent
-                view = view.call(_this2, _this2);
-                view.parent = _this2;
-                view.setElement($this).render(forced);
-                $this.data('subviewparent', _this2.cid);
-                _this2.subViewInstances[data.subview] = view;
-            }
+
+            _this2.renderSubView(data.subview, view, $this, forced);
         });
+    };
+
+    BiontView.prototype.shouldRenderSubView = function shouldRenderSubView(view) {
+        return true;
+    };
+
+    BiontView.prototype.renderSubView = function renderSubView(handle, view, $element, forced) {
+        var instance = this.subViewInstances[handle];
+        if (instance && instance instanceof _backbone2.default.View) {
+            if (!forced) {
+                instance.render();
+                return;
+            }
+            instance.remove();
+            delete this.subViewInstances[handle];
+        }
+        if (typeof view === 'function') {
+            // Support traditional and arrow functions to some extent
+            view = view.call(this, this);
+            view.parent = this;
+            view.setElement($element).render(forced);
+            $element.data('subviewparent', this.cid);
+            this.subViewInstances[handle] = view;
+        }
     };
 
     /**

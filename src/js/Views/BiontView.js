@@ -149,26 +149,40 @@ export default class BiontView extends Backbone.View.extend({
             }
 
             let view = this.subViews[data.subview];
-            let instance = this.subViewInstances[data.subview];
-            if (instance && instance instanceof Backbone.View) {
-                if (!forced) {
-                    instance.render();
-                    return;
-                }
-                instance.remove();
-                delete this.subViewInstances[data.subview];
 
-            }
-            if (typeof view === 'function') {
-                // Support traditional and arrow functions to some extent
-                view = view.call(this, this);
-                view.parent = this;
-                view.setElement($this).render(forced);
-                $this.data('subviewparent', this.cid);
-                this.subViewInstances[data.subview] = view;
+            if (!this.shouldRenderSubView(data.subview, view, $this, forced)) {
+                return;
             }
 
+            this.renderSubView(data.subview, view, $this, forced);
         });
+    }
+
+
+    shouldRenderSubView(view) {
+        return true;
+    }
+
+    renderSubView(handle, view, $element, forced) {
+        let instance = this.subViewInstances[handle];
+        if (instance && instance instanceof Backbone.View) {
+            if (!forced) {
+                instance.render();
+                return;
+            }
+            instance.remove();
+            delete this.subViewInstances[handle];
+
+        }
+        if (typeof view === 'function') {
+            // Support traditional and arrow functions to some extent
+            view = view.call(this, this);
+            view.parent = this;
+            view.setElement($element).render(forced);
+            $element.data('subviewparent', this.cid);
+            this.subViewInstances[handle] = view;
+        }
+
     }
 
     /**
