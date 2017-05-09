@@ -1,5 +1,5 @@
 import Backbone from "backbone";
-import {each, extend, mapObject} from "underscore";
+import {each, extend, result, mapObject} from "underscore";
 
 import Tpl from '../template-loader';
 
@@ -139,7 +139,9 @@ export default class BiontView extends Backbone.View.extend({
                 return;
             }
 
-            if (!this.subViews.hasOwnProperty(data.subview)) {
+            let subViews = result(this,'subViews');
+
+            if (!subViews.hasOwnProperty(data.subview)) {
                 return;
             }
             if (data.subviewparent && data.subviewparent !== this.cid) {
@@ -148,7 +150,7 @@ export default class BiontView extends Backbone.View.extend({
                 return;
             }
 
-            let view = this.subViews[data.subview];
+            let view = subViews[data.subview];
 
             if (!this.shouldRenderSubView(data.subview, view, $this, forced)) {
                 return;

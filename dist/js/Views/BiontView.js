@@ -174,7 +174,9 @@ var BiontView = function (_Backbone$View$extend) {
                 return;
             }
 
-            if (!_this2.subViews.hasOwnProperty(data.subview)) {
+            var subViews = (0, _underscore.result)(_this2, 'subViews');
+
+            if (!subViews.hasOwnProperty(data.subview)) {
                 return;
             }
             if (data.subviewparent && data.subviewparent !== _this2.cid) {
@@ -183,7 +185,7 @@ var BiontView = function (_Backbone$View$extend) {
                 return;
             }
 
-            var view = _this2.subViews[data.subview];
+            var view = subViews[data.subview];
 
             if (!_this2.shouldRenderSubView(data.subview, view, $this, forced)) {
                 return;
